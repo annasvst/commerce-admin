@@ -4,7 +4,8 @@
 
 import { useStoreModal } from "@/hooks/use-store-modal";
 import { useEffect } from "react";
-
+import { Button } from "@/components/ui/button";
+import { toast } from "react-hot-toast";
 
 
   const SetupPage = () =>{
@@ -20,6 +21,7 @@ import { useEffect } from "react";
    return (
    <div className="p-4">
     Root PAge
+    <Button onClick={() => toast.success('Test Toast!')}>Show Test Toast</Button>
    </div>
   );
 

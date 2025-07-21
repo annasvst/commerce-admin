@@ -4,7 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { ModalProvider } from "@/providers/modal-provider";
-
+import { ToasterProvider } from "@/providers/toast-provider";
 
 
 
@@ -21,6 +21,8 @@ export default function RootLayout({
 }:{
   children: React.ReactNode;
 }) {
+
+  
   return (
     <ClerkProvider>
     <html lang="en">
@@ -28,6 +30,7 @@ export default function RootLayout({
         className={inter.className}
         
       >
+        <ToasterProvider/>
         <ModalProvider />
           {children}
        
