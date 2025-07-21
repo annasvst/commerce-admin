@@ -56,14 +56,14 @@ export const StoreModal = () => {
                   <FormControl>
                     <Input placeholder="E-commerce" {...field} />
                   </FormControl>
-                 
+                  <FormMessage />
                 </FormItem>
               )}
             />
 
             <div className="pt-6 space-x-2 items-center justify-end">
-              <Button variant='outline'>Cancel</Button>
-              <Button>Continue</Button>
+              <Button variant='outline' onClick={storeModal.onClose}>Cancel</Button>
+              <Button type="submit">Continue</Button>
             </div>
           </form>
         </Form>
