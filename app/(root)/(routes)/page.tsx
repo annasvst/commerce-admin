@@ -18,12 +18,7 @@ import { toast } from "react-hot-toast";
       }
     }, [isOpen, onOpen]);
 
-   return (
-   <div className="p-4">
-    Root PAge
-    <Button onClick={() => toast.success('Test Toast!')}>Show Test Toast</Button>
-   </div>
-  );
+   return null;
 
 }
  
