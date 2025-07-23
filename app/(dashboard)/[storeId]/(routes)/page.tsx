@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import prismadb from "@/lib/prismadb";
 
 interface DashboardPageProps {
@@ -11,9 +12,13 @@ const DashboardPage = async ({ params }: DashboardPageProps) => {
     },
   });
 
+  if (!store) {
+    redirect("/"); // veya bir hata sayfasına yönlendir
+  }
+
   return (
     <div>
-      Active Store: {store?.name}
+      Active Store: {store.name}
     </div>
   );
 };
