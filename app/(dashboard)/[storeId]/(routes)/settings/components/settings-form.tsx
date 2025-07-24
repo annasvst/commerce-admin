@@ -23,6 +23,7 @@ import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
+import { useOrigin } from "@/hooks/use-origin";
 
 interface SettingsFormProps {
   initialData: Store;
@@ -39,7 +40,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
 
   const params = useParams();
   const router = useRouter();
-
+  const origin = useOrigin();
   const [open, setOpen] = useState(false);
 
   const form = useForm<SettingsFormValues>({
@@ -129,7 +130,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         </form>
       </Form>
       <Separator className="my-8" />
-      <ApiAlert title="NEXT_PUBLIC_API_URL" description="test description" variant={"public"}/>
+      <ApiAlert title="NEXT_PUBLIC_API_URL" description={`${origin}/api/${params.storeId}`} variant={"public"}/>
     </>
   );
 };
