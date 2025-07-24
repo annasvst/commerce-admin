@@ -9,10 +9,14 @@ interface MainNavProps extends React.HTMLAttributes<HTMLElement> {}
 export function MainNav({ className, ...props }: MainNavProps) {
   const pathname = usePathname();
   const params = useParams();
-
   const storeId = params?.storeId?.toString();
 
   const routes = [
+    {
+      href: `/${storeId}`,
+      label: "Overview",
+      active: pathname === `/${storeId}`,
+    },
     {
       href: `/${storeId}/settings`,
       label: "Settings",
