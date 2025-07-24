@@ -25,9 +25,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json(store);
 
-  } catch (error: any) {
-    console.error("[STORES_POST]", error.message);        // 🔍 Hata mesajı
-    console.error("[STORES_POST STACK]", error.stack);     // 🔍 Stack trace
+  } catch (error) {
+    console.error("[STORES_POST]", error);      
+
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
