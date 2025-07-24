@@ -1,32 +1,47 @@
-import { redirect } from "next/navigation";
+// components/navbar.tsx
+"use client";
+
+import { useState, useEffect } from "react";
 import { MainNav } from "./main-nav";
 import StoreSwitcher from "./store-switcher";
 import { UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import prismadb from "@/lib/prismadb";
 
-const Navbar = async () =>{
-  const { userId } = await auth();
+// !!! ÖNEMLİ: Store modelini import etmeniz gerekiyor.
+// Eğer Prisma kullanıyorsanız, genellikle @prisma/client kütüphanesinden gelir.
+// Eğer model tanımınız başka bir yerde ise (örn. types.ts), yolu ona göre ayarlayın.
+import { Store } from "@prisma/client"; // Bu satırı ekleyin!
 
-  if(!userId){
-    redirect('/sign-in');
+// Navbar'ın alacağı prop'ları tanımlıyoruz.
+interface NavbarProps {
+  userId: string | null;
+  // `stores` prop'unun tipini `Store[]` olarak güncelliyoruz
+  // Bu, StoreSwitcher'ın beklediği tüm alanları (id, name, userId, createdAt, updatedAt) içerir.
+  stores: Store[]; // Tipi '{ id: string; name: string; }[]' yerine 'Store[]' yaptık
+}
+
+const Navbar: React.FC<NavbarProps> = ({ userId, stores }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
   }
-  const stores= await prismadb.store.findMany({
-    where:{
-      userId
-    }
-  })
 
-  return(
+  return (
     <div className="border-b">
-     <div className="flex h-16 items-center px-4">
-        <StoreSwitcher items={stores}/>
-        <MainNav/>
+      <div className="flex h-16 items-center px-4">
+        {/* StoreSwitcher'a doğru tipte `stores` dizisini iletiyoruz */}
+        <StoreSwitcher items={stores} />
+        <MainNav />
         <div className="ml-auto flex items-center space-x-4">
-        <UserButton afterSignOutUrl="/"/>
+          <UserButton afterSignOutUrl="/" />
         </div>
-     </div>
+      </div>
     </div>
   );
-}
+};
+
 export default Navbar;
