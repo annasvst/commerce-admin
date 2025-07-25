@@ -6,7 +6,7 @@ import { CategoryForm } from "./components/category-form";
 const CategoryPage = async ({
   params,
 }: {
-  params: { categoryId: string }; // Dinamik rota parametreleri
+  params: { categoryId: string , storeId:string}; // Dinamik rota parametreleri
 }) => {
   // Veritabanından, verilen billboardId'ye sahip billboard'ı bul.
   // params.billboardId'ye doğrudan erişim, fonksiyon async olduğu için güvenli.
@@ -16,11 +16,17 @@ const CategoryPage = async ({
     },
   });
 
+  const billboards = await prismadb.billboard.findMany({
+    where:{
+      storeId: params.storeId 
+    }
+  })
+
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
         {/* billboard objesini initialData prop'u olarak BillboardForm'a iletiyoruz */}
-        <CategoryForm initialData={category} />
+        <CategoryForm billboards={billboards} initialData={category} />
       </div>
     </div>
   );
