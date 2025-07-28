@@ -2,24 +2,36 @@ import prismadb from "@/lib/prismadb";
 import BillboardClient from "./components/client";  
 import { BillboardColumn } from "./components/columns";
 import { format } from "date-fns";
-const BillboardsPage = async ({
+import { formatter } from "@/lib/utils";
+const ProductsPage = async ({
   params,
 }: {
   params: { storeId: string };
 }) => {
-  const billboards = await prismadb.billboard.findMany({
+  const products = await prismadb.product.findMany({
     where: {
       storeId: params.storeId,
+    },
+    include:{     
+      category: true,
+      size: true,
+      color: true,
     },
     orderBy: {
       createdAt: "desc",
     },
   });
 
- const formattedBillboards: BillboardColumn[] = billboards.map((item) => {
+ const formattedProducts: ProductColumn[] = products.map((item) => {
   return {
     id: item.id,
-    label: item.label,
+    name: item.name,
+    isFeatured: item.isFeatured,
+    isArchived: item.isArchived,
+    price: formatter.format(item.price.toNumber()),
+    category: item.category.name,
+    size: item.size.name,
+    color: item.color.name,
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   };
 });
@@ -35,4 +47,4 @@ const BillboardsPage = async ({
   );
 };
 
-export default BillboardsPage;
+export default ProductsPage;
