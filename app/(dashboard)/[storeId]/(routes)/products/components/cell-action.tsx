@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { BillboardColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Edit, Copy, Trash } from "lucide-react";
 import { toast } from "react-hot-toast";
@@ -17,8 +16,10 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { AlertModal } from "@/components/modals/alert-modal";
 
+import { ProductColumn } from "./columns";
+
 interface CellActionProps {
-  data: BillboardColumn;
+  data: ProductColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -29,23 +30,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Billboard ID copied to the clipboard");
+    toast.success("Product ID copied to the clipboard");
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/${params.storeId}/billboards/${data.id}`
-      );
+      await axios.delete(`/api/${params.storeId}/products/${data.id}`);
       router.refresh();
-      router.push(`/${params.storeId}/billboards`);
-      toast.success("Billboard deleted successfully");
+      toast.success("Product deleted successfully");
     } catch (error) {
-      console.log(error);
-      toast.error(
-        "Make sure you removed all categories using this billboard first"
-      );
+      console.error(error);
+      toast.error("Make sure you removed all dependencies before deleting");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -69,25 +65,30 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+
           <DropdownMenuItem
             onClick={() => onCopy(data.id)}
             className="cursor-pointer"
           >
-            <Copy className="mr-2 h-4 w-4 " />
+            <Copy className="mr-2 h-4 w-4" />
             Copy ID
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            className="cursor-pointer"
             onClick={() =>
-              router.push(`/${params.storeId}/billboards/${data.id}`)
+              router.push(`/${params.storeId}/products/${data.id}`)
             }
+            className="cursor-pointer"
           >
-            <Edit className="mr-2 h-4 w-4 " />
+            <Edit className="mr-2 h-4 w-4" />
             Update
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" onClick={() =>setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4 " />
+
+          <DropdownMenuItem
+            onClick={() => setOpen(true)}
+            className="cursor-pointer"
+          >
+            <Trash className="mr-2 h-4 w-4" />
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

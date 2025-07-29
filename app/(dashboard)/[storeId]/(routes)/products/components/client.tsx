@@ -12,7 +12,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { ApiList } from "@/components/ui/api-list";
 
 interface ProductClientProps {
-  data: ProductColumn;
+  data: ProductColumn[];
 }
 
 const ProductClient: React.FC<ProductClientProps> = ({ data }) => {

@@ -1,53 +1,68 @@
-// app/[storeId]/billboards/[billboardId]/page.tsx
-import prismadb from "@/lib/prismadb";
-import { ProductForm} from "./components/product-form";
+// app/(dashboard)/[storeId]/(routes)/products/[productId]/page.tsx
 
-// BillboardPage bileşeni bir Server Component'tir ve async olarak tanımlanmıştır.
+import prismadb from "@/lib/prismadb";
+import { ProductForm } from "./components/product-form";
+import { notFound } from "next/navigation";
+
 const ProductPage = async ({
   params,
 }: {
-  params: { productId: string, storeId: string }; // Dinamik rota parametreleri
+  params: { storeId: string; productId: string };
 }) => {
-  // Veritabanından, verilen productId'ye sahip ürünü bul.
-  // params.productId'ye doğrudan erişim, fonksiyon async olduğu için güvenli.
   const product = await prismadb.product.findUnique({
     where: {
       id: params.productId,
     },
-    include:{
-      images:true,
-
-    }
+    include: {
+      images: true,
+      category: true,
+      size: true,
+      color: true,
+    },
   });
+
+  if (!product) return notFound();
+
+  const formattedProduct = {
+    id: product.id,
+    name: product.name,
+    price: product.price.toNumber(), // ✅ Decimal → number dönüşümü
+    isFeatured: product.isFeatured,
+    isArchived: product.isArchived,
+    categoryId: product.categoryId,
+    sizeId: product.sizeId,
+    colorId: product.colorId,
+    images: product.images,
+    category: product.category,
+    size: product.size,
+    color: product.color,
+    createdAt: product.createdAt.toISOString(),
+    updatedAt: product.updatedAt.toISOString(),
+  };
 
   const categories = await prismadb.category.findMany({
-    where:{
+    where: {
       storeId: params.storeId,
-
-    }
+    },
   });
 
-
-   const sizes = await prismadb.size.findMany({
-    where:{
+  const sizes = await prismadb.size.findMany({
+    where: {
       storeId: params.storeId,
-
-    }
+    },
   });
 
-    const colors = await prismadb.color.findMany({
-    where:{
+  const colors = await prismadb.color.findMany({
+    where: {
       storeId: params.storeId,
-
-    }
+    },
   });
 
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        {/* product objesini initialData prop'u olarak ProductForm'a iletiyoruz */}
         <ProductForm
-          initialData={product}
+          initialData={formattedProduct}
           categories={categories}
           sizes={sizes}
           colors={colors}

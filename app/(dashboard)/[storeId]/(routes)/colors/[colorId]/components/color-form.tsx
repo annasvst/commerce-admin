@@ -27,9 +27,9 @@ import { AlertModal } from "@/components/modals/alert-modal";
 
 const formSchema = z.object({
   name: z.string().min(1),
-  value: z.string().min(4).regex(/^#/,{
-    message: "String must be a valid hex color code (e.g. #FFFFFF)",
-  }),
+ value: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, {
+  message: "Enter a valid hex color code (e.g. #FFF or #FFFFFF)",
+}),
 });
 
 type ColorFormValues = z.infer<typeof formSchema>;
