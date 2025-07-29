@@ -31,7 +31,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
    
     if (result.info && typeof result.info === 'object') {
       const newImageUrl = (result.info as { secure_url: string }).secure_url;
-      console.log("Yüklenen yeni görsel URL'si (onSuccess):", newImageUrl);
+      console.log("Yüklenen yeni görsel URL\'si (onSuccess):", newImageUrl);
       onChange(newImageUrl);
     }
   };

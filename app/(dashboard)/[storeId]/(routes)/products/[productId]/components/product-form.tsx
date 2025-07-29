@@ -81,7 +81,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema) as Resolver<ProductFormValues>,
-    defaultValues: {
+    defaultValues: initialData || {
       name: "",
       images: [],
       price: 0,
