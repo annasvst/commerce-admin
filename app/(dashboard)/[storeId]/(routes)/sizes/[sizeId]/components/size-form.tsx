@@ -24,8 +24,6 @@ import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 
-import ImageUpload from "@/components/ui/image-upload";
-
 const formSchema = z.object({
   name: z.string().min(1),
   value: z.string().min(1),
@@ -69,8 +67,10 @@ export const SizeForm: React.FC<SizeFormProps> = ({
       }
      
       router.refresh();
+      router.push(`/${params.storeId}/sizes`);
       toast.success(toastMessage);
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
@@ -82,7 +82,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({
       setLoading(true);
       await axios.delete(`/api/${params.storeId}/sizes/${params.sizeId}`);
       router.refresh();
-      router.push("/");
+      router.push(`/${params.storeId}/sizes`);
       toast.success("Size deleted successfully");
       
       

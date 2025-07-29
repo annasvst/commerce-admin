@@ -97,14 +97,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/billboards/${params.billboardId}`,
+          `/api/${params.storeId}/products/${params.productId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/billboards`, data);
+        await axios.post(`/api/${params.storeId}/products`, data);
       }
 
       router.refresh();
+      router.push(`/${params.storeId}/products`);
       toast.success(toastMessage);
     } catch (error) {
       console.error(error);
@@ -118,15 +119,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.storeId}/billboards/${params.billboardId}`
+        `/api/${params.storeId}/products/${params.productId}`
       );
       router.refresh();
-      router.push("/");
-      toast.success("Billboard deleted successfully");
+      router.push(`/${params.storeId}/products`);
+      toast.success("Product deleted successfully");
     } catch (error) {
       console.log(error);
       toast.error(
-        "Make sure you removed all categories using this billboard first"
+        "Make sure you removed all categories using this product first"
       );
     } finally {
       setLoading(false);
@@ -330,41 +331,44 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             )}
           />
 
-            <FormField
+          <FormField
             control={form.control}
             name="isFeatured"
             render={({ field }) => (
               <FormItem className="flex flex-row items-center space-x-3 space-y-8 rounded-md border p-4">
-               <FormControl>
-                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-               </FormControl>
-               <div className="space-y-1 leading-none">
-                <FormLabel>Featured</FormLabel>
-                <FormDescription>
-                  This product will appear on the home page
-                </FormDescription>
-
-               </div>
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Featured</FormLabel>
+                  <FormDescription>
+                    This product will appear on the home page
+                  </FormDescription>
+                </div>
               </FormItem>
             )}
           />
-
 
           <FormField
             control={form.control}
             name="isArchived"
             render={({ field }) => (
               <FormItem className="flex flex-row items-center space-x-3 space-y-8 rounded-md border p-4">
-               <FormControl>
-                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-               </FormControl>
-               <div className="space-y-1 leading-none">
-                <FormLabel>Archived</FormLabel>
-                <FormDescription>
-                  This product will not appear in the store
-                </FormDescription>
-
-               </div>
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Archived</FormLabel>
+                  <FormDescription>
+                    This product will not appear in the store
+                  </FormDescription>
+                </div>
               </FormItem>
             )}
           />

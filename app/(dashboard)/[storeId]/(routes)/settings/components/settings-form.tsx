@@ -58,6 +58,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       toast.success("Store updated successfully");
 
     }catch(error){
+      console.log(error);
       toast.error("Something went wrong");
     }finally{
       setLoading(false);

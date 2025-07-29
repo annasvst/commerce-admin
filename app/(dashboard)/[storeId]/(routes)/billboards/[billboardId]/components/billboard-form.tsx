@@ -69,8 +69,10 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       }
      
       router.refresh();
+      router.push(`/${params.storeId}/billboards`);
       toast.success(toastMessage);
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
@@ -82,7 +84,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       setLoading(true);
       await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
       router.refresh();
-      router.push("/");
+      router.push(`/${params.storeId}/billboards`);
       toast.success("Billboard deleted successfully");
       
       
