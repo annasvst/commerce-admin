@@ -10,6 +10,7 @@ interface ImageUploadProps {
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
   value: string[];
+  multiple?: boolean; 
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -17,6 +18,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   onChange,
   onRemove,
   value,
+  multiple = false, // Default to false if not provided
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -71,6 +73,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     
         onSuccess={handleUploadSuccess}
         uploadPreset="djwe7pync"
+        options={{ multiple }}
+
       >
         {({ open }) => (
           <Button

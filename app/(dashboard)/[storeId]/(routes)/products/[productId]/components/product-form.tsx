@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { useForm } from "react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import axios from "axios";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -77,19 +79,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const action = initialData ? "Save changes" : "Create";
 
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialData
-      ? { ...initialData, price: parseFloat(String(initialData.price)) }
-      : {
-          name: "",
-          images: [],
-          price: 0,
-          categoryId: "",
-          colorId: "",
-          sizeId: "",
-          isFeatured: false,
-          isArchived: false,
-        },
+    resolver: zodResolver(formSchema) as Resolver<ProductFormValues>,
+    defaultValues: {
+      name: "",
+      images: [],
+      price: 0,
+      categoryId: "",
+      colorId: "",
+      sizeId: "",
+      isFeatured: false,
+      isArchived: false,
+    },
   });
 
   const onSubmit = async (data: ProductFormValues) => {
@@ -107,6 +107,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       router.refresh();
       toast.success(toastMessage);
     } catch (error) {
+      console.error(error);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
@@ -173,12 +174,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   <ImageUpload
                     value={field.value.map((image) => image.url)}
                     disabled={loading}
+                    multiple={true}
                     onChange={(url) =>
-                      field.onChange([...field.value, { url }])
+                      field.onChange([...(field.value ?? []), { url }])
                     }
                     onRemove={(url) =>
                       field.onChange(
-                        field.value.filter((current) => current.url !== url)
+                        field.value.filter((image) => image.url !== url)
                       )
                     }
                   />
@@ -226,7 +228,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               </FormItem>
             )}
           />
-
+          {/* Category */}
           <FormField
             control={form.control}
             name="categoryId"
@@ -256,6 +258,113 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   </SelectContent>
                 </Select>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* size */}
+
+          <FormField
+            control={form.control}
+            name="sizeId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Size</FormLabel>
+                <Select
+                  disabled={loading}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder="Select a size"
+                        defaultValue={field.value}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {sizes.map((size) => (
+                      <SelectItem key={size.id} value={size.id}>
+                        {size.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* color */}
+          <FormField
+            control={form.control}
+            name="colorId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Color</FormLabel>
+                <Select
+                  disabled={loading}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder="Select a color"
+                        defaultValue={field.value}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {colors.map((color) => (
+                      <SelectItem key={color.id} value={color.id}>
+                        {color.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+            <FormField
+            control={form.control}
+            name="isFeatured"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center space-x-3 space-y-8 rounded-md border p-4">
+               <FormControl>
+                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+               </FormControl>
+               <div className="space-y-1 leading-none">
+                <FormLabel>Featured</FormLabel>
+                <FormDescription>
+                  This product will appear on the home page
+                </FormDescription>
+
+               </div>
+              </FormItem>
+            )}
+          />
+
+
+          <FormField
+            control={form.control}
+            name="isArchived"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center space-x-3 space-y-8 rounded-md border p-4">
+               <FormControl>
+                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+               </FormControl>
+               <div className="space-y-1 leading-none">
+                <FormLabel>Archived</FormLabel>
+                <FormDescription>
+                  This product will not appear in the store
+                </FormDescription>
+
+               </div>
               </FormItem>
             )}
           />
