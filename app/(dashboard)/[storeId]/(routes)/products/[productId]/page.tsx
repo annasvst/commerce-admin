@@ -9,21 +9,27 @@ const ProductPage = async ({
 }: {
   params: { storeId: string; productId: string };
 }) => {
-  const product = await prismadb.product.findUnique({
-    where: {
-      id: params.productId,
-    },
-    include: {
-      images: true,
-      category: true,
-      size: true,
-      color: true,
-    },
-  });
+  let product = null;
 
-  if (!product) return notFound();
+  if (params.productId !== "new") {
+    product = await prismadb.product.findUnique({
+      where: {
+        id: params.productId,
+      },
+      include: {
+        images: true,
+        category: true,
+        size: true,
+        color: true,
+      },
+    });
+  }
 
-  const formattedProduct = {
+  if (params.productId !== "new" && !product) {
+    return notFound();
+  }
+
+  const formattedProduct = product ? {
     id: product.id,
     name: product.name,
     price: product.price.toNumber(), // ✅ Decimal → number dönüşümü
@@ -38,7 +44,7 @@ const ProductPage = async ({
     color: product.color,
     createdAt: product.createdAt.toISOString(),
     updatedAt: product.updatedAt.toISOString(),
-  };
+  } : null;
 
   const categories = await prismadb.category.findMany({
     where: {
