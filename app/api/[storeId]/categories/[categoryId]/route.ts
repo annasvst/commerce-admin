@@ -107,10 +107,13 @@ export async function DELETE(
     }
 
 
-    const category = await prismadb.category.deleteMany({
+    const category = await prismadb.category.delete({
       where: {
         id: params.categoryId,
       },
+      include : {
+        billboard:true
+      }
     });
 
     return NextResponse.json(category);
