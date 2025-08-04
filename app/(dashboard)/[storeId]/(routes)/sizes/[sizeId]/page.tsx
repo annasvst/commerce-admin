@@ -5,14 +5,13 @@ import { SizeForm } from "./components/size-form";
 // SizePage bileşeni bir Server Component'tir ve async olarak tanımlanmıştır.
 const SizePage = async ({
   params,
-}: {
-  params: { sizeId: string }; // Dinamik rota parametreleri
-}) => {
+}: { params: Promise<{ sizeId: string }> }) => {
+  const { sizeId } = await params;
   // Veritabanından, verilen billboardId'ye sahip billboard'ı bul.
   // params.billboardId'ye doğrudan erişim, fonksiyon async olduğu için güvenli.
   const size = await prismadb.size.findUnique({
     where: {
-      id: params.sizeId,
+      id: sizeId,
     },
   });
 

@@ -11,16 +11,16 @@ import { Overview } from "@/components/overview";
 import { getGraphRevenue } from "@/actions/get-graph-revenue";
 
 interface DashboardPageProps {
-  params: { storeId: string }; 
+  params: Promise<{ storeId: string }>; 
 }
 
 
 const DashboardPage = async ({ params }: DashboardPageProps) => {
-  
-const totalRevenue = await getTotalRevenue(params.storeId);
-const salesCount = await getSalesCount(params.storeId);
-const stockCount = await getStockCount(params.storeId);
-const graphData = await getGraphRevenue(params.storeId);
+  const { storeId } = await params; // Await params here
+const totalRevenue = await getTotalRevenue(storeId);
+const salesCount = await getSalesCount(storeId);
+const stockCount = await getStockCount(storeId);
+const graphData = await getGraphRevenue(storeId);
 
 
   return (

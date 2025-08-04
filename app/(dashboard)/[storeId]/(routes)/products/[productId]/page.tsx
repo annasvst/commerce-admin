@@ -6,15 +6,14 @@ import { notFound } from "next/navigation";
 
 const ProductPage = async ({
   params,
-}: {
-  params: { storeId: string; productId: string };
-}) => {
+}: { params: Promise<{ storeId: string; productId: string }> }) => {
+  const { storeId, productId } = await params; // Destructure and await params
   let product = null;
 
-  if (params.productId !== "new") {
+  if (productId !== "new") {
     product = await prismadb.product.findUnique({
       where: {
-        id: params.productId,
+        id: productId,
       },
       include: {
         images: true,
@@ -25,7 +24,7 @@ const ProductPage = async ({
     });
   }
 
-  if (params.productId !== "new" && !product) {
+  if (productId !== "new" && !product) {
     return notFound();
   }
 
@@ -48,19 +47,19 @@ const ProductPage = async ({
 
   const categories = await prismadb.category.findMany({
     where: {
-      storeId: params.storeId,
+      storeId: storeId,
     },
   });
 
   const sizes = await prismadb.size.findMany({
     where: {
-      storeId: params.storeId,
+      storeId: storeId,
     },
   });
 
   const colors = await prismadb.color.findMany({
     where: {
-      storeId: params.storeId,
+      storeId: storeId,
     },
   });
 

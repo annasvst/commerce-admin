@@ -5,14 +5,13 @@ import { ColorForm } from "./components/color-form";
 // SizePage bileşeni bir Server Component'tir ve async olarak tanımlanmıştır.
 const ColorPage = async ({
   params,
-}: {
-  params: { colorId: string }; // Dinamik rota parametreleri
-}) => {
+}: { params: Promise<{ colorId: string }> }) => {
+  const { colorId } = await params;
   // Veritabanından, verilen billboardId'ye sahip billboard'ı bul.
   // params.billboardId'ye doğrudan erişim, fonksiyon async olduğu için güvenli.
   const color = await prismadb.color.findUnique({
     where: {
-      id: params.colorId,
+      id: colorId,
     },
   });
 

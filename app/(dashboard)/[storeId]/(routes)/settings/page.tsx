@@ -4,13 +4,12 @@ import { redirect } from "next/navigation";
 import { SettingsForm } from "./components/settings-form";
 
 interface SettingsPageProps {
-  params: {
-    storeId: string;
-  };
+  params: Promise<{ storeId: string }>;
 }
 
 // ❌ React.FC yerine sadece async function component
 const SettingsPage = async ({ params }: SettingsPageProps) => {
+  const { storeId } = await params; // Await params here
   const { userId } = await auth();
 
   if (!userId) {
@@ -19,7 +18,7 @@ const SettingsPage = async ({ params }: SettingsPageProps) => {
 
   const store = await prismadb.store.findFirst({
     where: {
-      id: params.storeId,
+      id: storeId,
       userId,
     },
   });
