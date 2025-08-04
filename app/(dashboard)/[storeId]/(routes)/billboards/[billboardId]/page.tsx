@@ -4,11 +4,10 @@ import prismadb from "@/lib/prismadb";
 import { BillboardForm } from "./components/billboard-form";
 
 interface BillboardPageProps {
-  params: {
-    billboardId: string;
-  };
+  params: { billboardId: string };
 }
 
+// ✅ Bileşen `async` tanımlanmalı ve `params` destructure ile alınmalı
 const BillboardPage = async ({ params }: BillboardPageProps) => {
   const billboard = await prismadb.billboard.findUnique({
     where: {
