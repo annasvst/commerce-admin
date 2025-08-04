@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import { Product, Image, Category, Color, Size } from "@prisma/client";
+import { Category, Color, Size } from "@prisma/client";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -108,8 +108,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       router.refresh();
       router.push(`/${params.storeId}/products`);
       toast.success(toastMessage);
-    } catch (error) {
-      console.error(error);
+    } catch (_error) {
+      console.error(_error);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);

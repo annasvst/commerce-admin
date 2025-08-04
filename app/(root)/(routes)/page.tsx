@@ -4,8 +4,6 @@
 
 import { useStoreModal } from "@/hooks/use-store-modal";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { toast } from "react-hot-toast";
 
 
   const SetupPage = () =>{

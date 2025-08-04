@@ -4,12 +4,10 @@ import { cn } from "@/lib/utils";
 import { usePathname, useParams } from "next/navigation";
 import Link from "next/link";
 
-interface MainNavProps extends React.HTMLAttributes<HTMLElement> {}
-
-export function MainNav({ className, ...props }: MainNavProps) {
+export function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
   const pathname = usePathname();
   const params = useParams();
-  const storeId = params?.storeId?.toString();
+// const storeId = params?.storeId?.toString();
 
   const routes = [
     {

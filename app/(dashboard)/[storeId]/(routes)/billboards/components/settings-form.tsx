@@ -57,7 +57,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       router.refresh();
       toast.success("Store updated successfully");
 
-    }catch(error){
+    }catch(_error){
+      console.log(_error);
       toast.error("Something went wrong");
     }finally{
       setLoading(false);
@@ -72,8 +73,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     toast.success("Store deleted successfully");
     router.refresh();
     router.push("/");
-  } catch (error) {
-    console.log(error);
+  } catch (_error) {
+    console.log(_error);
     toast.error("Make sure you removed all products and categories first");
   } finally {
     setLoading(false);

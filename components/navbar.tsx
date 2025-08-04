@@ -14,13 +14,12 @@ import { Store } from "@prisma/client"; // Bu satırı ekleyin!
 
 // Navbar'ın alacağı prop'ları tanımlıyoruz.
 interface NavbarProps {
-  userId: string | null;
   // `stores` prop'unun tipini `Store[]` olarak güncelliyoruz
   // Bu, StoreSwitcher'ın beklediği tüm alanları (id, name, userId, createdAt, updatedAt) içerir.
   stores: Store[]; // Tipi '{ id: string; name: string; }[]' yerine 'Store[]' yaptık
 }
 
-const Navbar: React.FC<NavbarProps> = ({ userId, stores }) => {
+const Navbar: React.FC<NavbarProps> = ({ stores }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
