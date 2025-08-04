@@ -12,7 +12,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { ApiList } from "@/components/ui/api-list";
 
 interface BillboardClientProps {
-  data: BillboardColumn;
+  data: BillboardColumn[];
 }
 
 const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
