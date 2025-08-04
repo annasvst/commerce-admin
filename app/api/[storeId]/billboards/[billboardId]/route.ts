@@ -2,9 +2,13 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+interface BillboardRouteParams {
+  params: { billboardId: string; storeId: string };
+}
+
 export async function GET(
   req: Request,
-  { params }: { params: { billboardId: string } }
+  { params }: BillboardRouteParams
 ) {
   try {
     const billboard = await prismadb.billboard.findUnique({
@@ -23,7 +27,7 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { storeId: string; billboardId: string } }
+  { params }: BillboardRouteParams
 ) {
   try {
     const { userId } = await auth();
@@ -79,10 +83,9 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { storeId: string; billboardId: string } }
+  { params }: BillboardRouteParams
 ) {
   try {
-   
     const { userId } = await auth();
 
     if (!userId) {
