@@ -5,20 +5,19 @@ import { CategoryForm } from "./components/category-form";
 // BillboardPage bileşeni bir Server Component'tir ve async olarak tanımlanmıştır.
 const CategoryPage = async ({
   params,
-}: {
-  params: { categoryId: string , storeId:string}; // Dinamik rota parametreleri
-}) => {
+}: { params: Promise<{ categoryId: string ; storeId: string }> }) => {
+  const { categoryId, storeId } = await params; // Destructure and await params
   // Veritabanından, verilen billboardId'ye sahip billboard'ı bul.
   // params.billboardId'ye doğrudan erişim, fonksiyon async olduğu için güvenli.
   const category = await prismadb.category.findUnique({
     where: {
-      id: params.categoryId,
+      id: categoryId,
     },
   });
 
   const billboards = await prismadb.billboard.findMany({
     where:{
-      storeId: params.storeId 
+      storeId: storeId 
     }
   })
 
