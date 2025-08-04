@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { MainNav } from "./main-nav";
 import StoreSwitcher from "./store-switcher";
 import { UserButton } from "@clerk/nextjs";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 // !!! ÖNEMLİ: Store modelini import etmeniz gerekiyor.
 // Eğer Prisma kullanıyorsanız, genellikle @prisma/client kütüphanesinden gelir.
@@ -37,6 +38,7 @@ const Navbar: React.FC<NavbarProps> = ({ userId, stores }) => {
         <StoreSwitcher items={stores} />
         <MainNav />
         <div className="ml-auto flex items-center space-x-4">
+          <ThemeToggle/>
           <UserButton afterSignOutUrl="/" />
         </div>
       </div>
