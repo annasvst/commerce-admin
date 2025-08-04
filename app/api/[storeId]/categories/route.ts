@@ -1,31 +1,21 @@
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function POST(
-  req: Request,
-  { params }: { params: { storeId: string } }
+  req: NextRequest,
+  context: { params: { storeId: string } }
 ) {
   try {
     const { userId } = await auth();
     const body = await req.json();
     const { name, billboardId } = body;
+    const { params } = context;
 
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 401 });
-    }
-
-    if (!name) {
-      return new NextResponse("Name is required", { status: 400 });
-    }
-
-    if (!billboardId) {
-      return new NextResponse("Billoard ID is required", { status: 400 });
-    }
-
-    if (!params.storeId) {
-      return new NextResponse("StoreId is required", { status: 400 });
-    }
+    if (!userId) return new NextResponse("Unauthenticated", { status: 401 });
+    if (!name) return new NextResponse("Name is required", { status: 400 });
+    if (!billboardId) return new NextResponse("Billboard ID is required", { status: 400 });
+    if (!params.storeId) return new NextResponse("StoreId is required", { status: 400 });
 
     const storeByUserId = await prismadb.store.findFirst({
       where: {
@@ -34,9 +24,7 @@ export async function POST(
       },
     });
 
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
+    if (!storeByUserId) return new NextResponse("Unauthorized", { status: 403 });
 
     const category = await prismadb.category.create({
       data: {
@@ -48,16 +36,18 @@ export async function POST(
 
     return NextResponse.json(category);
   } catch (error) {
-    console.error("[CATEGORİES_POST]", error);
+    console.error("[CATEGORIES_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
 export async function GET(
-  req: Request,
-  { params }: { params: { storeId: string } }
+  req: NextRequest,
+  context: { params: { storeId: string } }
 ) {
   try {
+    const { params } = context;
+
     if (!params.storeId) {
       return new NextResponse("StoreId is required", { status: 400 });
     }

@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 import { stripe } from '@/lib/stripe';
 import prismadb from '@/lib/prismadb';
@@ -16,9 +16,10 @@ export async function OPTIONS() {
 }
 
 export async function POST(
-  req: Request,
-  { params }: { params: { storeId: string } }
+  req: NextRequest,
+  context: { params: { storeId: string } }
 ) {
+  const { params } = context;
   const { productIds } = await req.json();
 
   if (!productIds || productIds.length === 0) {
@@ -34,7 +35,7 @@ export async function POST(
   });
 
   const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = products.map((product) => ({
-    quantity: 1, // Stripe line_items için quantity zorunlu
+    quantity: 1,
     price_data: {
       currency: 'USD',
       product_data: {
