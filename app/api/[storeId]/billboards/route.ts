@@ -2,13 +2,9 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-interface BillboardRouteParams {
-  params: { storeId: string };
-}
-
 export async function POST(
   req: Request,
-  { params }: BillboardRouteParams
+  { params }: { params: { storeId: string } }
 ) {
   try {
     const { userId } = await auth();
@@ -59,7 +55,7 @@ export async function POST(
 
 export async function GET(
   req: Request,
-  { params }: BillboardRouteParams
+  { params }: { params: { storeId: string } }
 ) {
   try {
     if (!params.storeId) {
