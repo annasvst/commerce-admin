@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  context: { params: { billboardId: string } }
+  context: { params: { storeId: string; billboardId: string } }
 ) {
   try {
     const { billboardId } = context.params;
