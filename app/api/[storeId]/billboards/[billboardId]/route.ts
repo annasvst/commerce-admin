@@ -1,14 +1,22 @@
-import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import prismadb from '@/lib/prismadb';
+import { auth } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export async function GET(
   req: NextRequest,
-  context: { params: { storeId: string; billboardId: string } }
+  { params }: { params: { storeId: string; billboardId: string } },
 ) {
   try {
-    const { billboardId } = context.params;
+    const { storeId, billboardId } = params;
+
+    if (!storeId) {
+      return new NextResponse('Store ID is required', { status: 400 });
+    }
+
+    if (!billboardId) {
+      return new NextResponse('Billboard ID is required', { status: 400 });
+    }
 
     const billboard = await prismadb.billboard.findUnique({
       where: {
@@ -18,14 +26,14 @@ export async function GET(
 
     return NextResponse.json(billboard);
   } catch (error) {
-    console.error("[BILLBOARD_GET]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    console.error('[BILLBOARD_GET]', error);
+    return new NextResponse('Internal Error', { status: 500 });
   }
 }
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: { storeId: string; billboardId: string } }
+  context: { params: { storeId: string; billboardId: string } },
 ) {
   try {
     const { storeId, billboardId } = context.params;
@@ -33,9 +41,10 @@ export async function PATCH(
     const body = await req.json();
     const { label, imageUrl } = body;
 
-    if (!userId) return new NextResponse("Unauthenticated", { status: 401 });
-    if (!label) return new NextResponse("Label is required", { status: 400 });
-    if (!imageUrl) return new NextResponse("Image URL is required", { status: 400 });
+    if (!userId) return new NextResponse('Unauthenticated', { status: 401 });
+    if (!label) return new NextResponse('Label is required', { status: 400 });
+    if (!imageUrl)
+      return new NextResponse('Image URL is required', { status: 400 });
 
     const storeByUserId = await prismadb.store.findFirst({
       where: {
@@ -44,7 +53,8 @@ export async function PATCH(
       },
     });
 
-    if (!storeByUserId) return new NextResponse("Unauthorized", { status: 403 });
+    if (!storeByUserId)
+      return new NextResponse('Unauthorized', { status: 403 });
 
     const billboard = await prismadb.billboard.updateMany({
       where: {
@@ -59,20 +69,20 @@ export async function PATCH(
 
     return NextResponse.json(billboard);
   } catch (error) {
-    console.error("[BILLBOARD_PATCH]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    console.error('[BILLBOARD_PATCH]', error);
+    return new NextResponse('Internal Error', { status: 500 });
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { storeId: string; billboardId: string } }
+  context: { params: { storeId: string; billboardId: string } },
 ) {
   try {
     const { storeId, billboardId } = context.params;
     const { userId } = await auth();
 
-    if (!userId) return new NextResponse("Unauthenticated", { status: 401 });
+    if (!userId) return new NextResponse('Unauthenticated', { status: 401 });
 
     const storeByUserId = await prismadb.store.findFirst({
       where: {
@@ -81,7 +91,8 @@ export async function DELETE(
       },
     });
 
-    if (!storeByUserId) return new NextResponse("Unauthorized", { status: 403 });
+    if (!storeByUserId)
+      return new NextResponse('Unauthorized', { status: 403 });
 
     const billboard = await prismadb.billboard.deleteMany({
       where: {
@@ -91,7 +102,7 @@ export async function DELETE(
 
     return NextResponse.json(billboard);
   } catch (error) {
-    console.error("[BILLBOARD_DELETE]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    console.error('[BILLBOARD_DELETE]', error);
+    return new NextResponse('Internal Error', { status: 500 });
   }
 }
