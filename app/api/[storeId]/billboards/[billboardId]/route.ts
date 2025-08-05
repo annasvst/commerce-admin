@@ -3,10 +3,15 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { billboardId: string; storeId: string } }
-) {
+// ✅ Type context'i yukarıda tanımla
+type BillboardRouteContext = {
+  params: {
+    billboardId: string;
+    storeId: string;
+  };
+};
+
+export async function GET(req: NextRequest, context: BillboardRouteContext) {
   try {
     const { params } = context;
 
@@ -23,10 +28,7 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  req: NextRequest,
-  context: { params: { billboardId: string; storeId: string } }
-) {
+export async function PATCH(req: NextRequest, context: BillboardRouteContext) {
   try {
     const { params } = context;
     const { userId } = await auth();
@@ -65,10 +67,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  context: { params: { billboardId: string; storeId: string } }
-) {
+export async function DELETE(req: NextRequest, context: BillboardRouteContext) {
   try {
     const { params } = context;
     const { userId } = await auth();
