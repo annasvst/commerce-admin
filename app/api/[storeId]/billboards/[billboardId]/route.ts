@@ -5,10 +5,10 @@ import type { NextRequest } from 'next/server';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { storeId: string; billboardId: string } },
+  { params }: { params: Promise<{ storeId: string; billboardId: string }> },
 ) {
   try {
-    const { storeId, billboardId } = params;
+    const { storeId, billboardId } = await params;
 
     if (!storeId) {
       return new NextResponse('Store ID is required', { status: 400 });
