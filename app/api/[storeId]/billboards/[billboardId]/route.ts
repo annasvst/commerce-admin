@@ -5,10 +5,10 @@ import type { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  context: { params: { storeId: string; billboardId: string } }
+  context: { params: { billboardId: string } }
 ) {
   try {
-    const { storeId, billboardId } = context.params;
+    const { billboardId } = context.params;
 
     const billboard = await prismadb.billboard.findUnique({
       where: {
