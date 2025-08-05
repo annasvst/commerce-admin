@@ -33,10 +33,10 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: { storeId: string; billboardId: string } },
+  context: { params: Promise<{ storeId: string; billboardId: string }> },
 ) {
   try {
-    const { storeId, billboardId } = context.params;
+    const { storeId, billboardId } = await context.params;
     const { userId } = await auth();
     const body = await req.json();
     const { label, imageUrl } = body;
@@ -76,10 +76,10 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { storeId: string; billboardId: string } },
+  context: { params: Promise<{ storeId: string; billboardId: string }> },
 ) {
   try {
-    const { storeId, billboardId } = context.params;
+    const { storeId, billboardId } = await context.params;
     const { userId } = await auth();
 
     if (!userId) return new NextResponse('Unauthenticated', { status: 401 });
